@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.amtr.minioaserver.mapper.DepartmentMapper">
+    <select id="select" resultType="com.amtr.minioaserver.pojo.Department">
+        select * from line
+        <where>
+            <if test="id!=null and id!=''">
+                id = #{id}
+            </if>
+            <if test="title!=null and title!=''">
+                and title = #{title}
+            </if>
+        </where>
+    </select>
+    <update id="update">
+        update line
+        <set>
+            <if test="title!=null and title!=''">
+                title=#{title},
+            </if>
+            update_time=#{updateTime}
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

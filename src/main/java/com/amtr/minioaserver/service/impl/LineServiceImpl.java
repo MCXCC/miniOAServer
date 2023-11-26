@@ -22,10 +22,13 @@ public class LineServiceImpl implements LineService {
     @Override
     public boolean insert(Line line) {
         // 判断是否线路名称是否已存在
-        if (!lineMapper.select(line).isEmpty())
+        if (!lineMapper.select(new Line(line.getTitle())).isEmpty())
+            // 如果线路存在直接返回
             return false;
+        // 设置创建时间和更新时间
         line.setCreateTime(LocalDateTime.now());
         line.setUpdateTime(LocalDateTime.now());
+        // 创建线路
         lineMapper.insert(line);
         return true;
     }
@@ -37,6 +40,7 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public void update(Line line) {
+        // 设置更新时间
         line.setUpdateTime(LocalDateTime.now());
         lineMapper.update(line);
     }

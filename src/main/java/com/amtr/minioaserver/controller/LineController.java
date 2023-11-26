@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 线路相关控制器
+ */
 @Slf4j
 @RestController
 @CrossOrigin(origins = "*") // 允许来自指定域名的跨域请求
@@ -27,6 +30,7 @@ public class LineController {
     @PostMapping
     public Result insert(@RequestBody Line line) {
         log.info("创建新线路:{}", line);
+        // 判断线路是否存在
         if (lineService.insert(line))
             return Result.success();
         else return Result.failMsg("线路已存在");
