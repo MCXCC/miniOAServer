@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface LineService {
 
-    List<Line> select();
+    List<Line> select(Line line);
 
     boolean insert(Line line);
 

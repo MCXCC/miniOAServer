@@ -24,7 +24,7 @@ public class Line {
     /**
      * 分管主任ID
      */
-    private String directorId;
+    private Integer directorId;
     /**
      * 创建时间
      */
@@ -54,11 +54,11 @@ public class Line {
         this.title = title;
     }
 
-    public String getDirectorId() {
+    public Integer getDirectorId() {
         return directorId;
     }
 
-    public void setDirectorId(String directorId) {
+    public void setDirectorId(Integer directorId) {
         this.directorId = directorId;
     }
 

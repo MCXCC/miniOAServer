@@ -18,9 +18,9 @@ public class LineController {
     private LineService lineService;
 
     @GetMapping
-    public Result select() {
-        log.info("查询全部线路");
-        List<Line> list = lineService.select();
+    public Result select(@RequestBody(required = false) Line line) {
+        log.info("查询线路");
+        List<Line> list = lineService.select(line);
         return Result.success(list);
     }
 

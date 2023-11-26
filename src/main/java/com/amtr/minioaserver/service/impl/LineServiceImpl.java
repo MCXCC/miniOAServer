@@ -6,7 +6,6 @@ import com.amtr.minioaserver.service.LineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Printable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,14 +15,14 @@ public class LineServiceImpl implements LineService {
     private LineMapper lineMapper;
 
     @Override
-    public List<Line> select() {
-        return lineMapper.select();
+    public List<Line> select(Line line) {
+        return lineMapper.select(line);
     }
 
     @Override
     public boolean insert(Line line) {
-        // 判断是否线路是否已存在
-        if (!lineMapper.selectByTitle(line.getTitle()).isEmpty())
+        // 判断是否线路名称是否已存在
+        if (!lineMapper.select(line).isEmpty())
             return false;
         line.setCreateTime(LocalDateTime.now());
         line.setUpdateTime(LocalDateTime.now());
