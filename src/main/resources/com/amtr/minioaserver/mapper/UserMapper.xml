@@ -3,20 +3,56 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.amtr.minioaserver.mapper.UserMapper">
-    <select id="select" resultType="com.amtr.minioaserver.pojo.User">
-        select * from user
+    <resultMap id="userWithPostResultMap" type="com.amtr.minioaserver.pojo.User">
+        <id property="id" column="id"/>
+        <id property="workNumber" column="work_number"/>
+        <id property="password" column="password"/>
+        <id property="name" column="name"/>
+        <id property="avatarUrl" column="avatar_url"/>
+        <id property="createTime" column="create_time"/>
+        <id property="updateTime" column="update_time"/>
+        <!-- 嵌套查询映射 Post 类的属性 -->
+        <association property="post" javaType="com.amtr.minioaserver.pojo.Post">
+            <id property="id" column="post_id"/>
+            <!-- 其他 Post 类的属性映射 -->
+            <result property="title" column="post_title"/>
+        </association>
+        <!-- 嵌套查询映射 Department 类的属性 -->
+        <association property="department" javaType="com.amtr.minioaserver.pojo.Department">
+            <id property="id" column="department_id"/>
+            <!-- 其他 Department 类的属性映射 -->
+            <result property="title" column="department_title"/>
+        </association>
+        <!-- 嵌套查询映射 Line 类的属性 -->
+        <association property="line" javaType="com.amtr.minioaserver.pojo.Line">
+            <id property="id" column="line_id"/>
+            <!-- 其他 Department 类的属性映射 -->
+            <result property="title" column="line_title"/>
+        </association>
+    </resultMap>
+
+    <select id="select" resultMap="userWithPostResultMap">
+        SELECT u.id, u.work_number, u.password, u.name, u.avatar_url, u.line_id, u.create_time, u.update_time,
+        p.id AS post_id, p.title AS post_title,
+        d.id AS department_id, d.title AS department_title,
+        l.id AS line_id, l.title AS line_title
+        FROM user u
+        left join post p on u.post_id=p.id
+        left join department d on u.department_id=d.id
+        left join line l on u.line_id=l.id
         <where>
-            <if test="id!=null and id!=''">
-                id = #{id}
+            <if test="id != null and id != ''">
+                AND u.id = #{id}
             </if>
-            <if test="workNumber!=null and workNumber!=''">
-                and work_number = #{workNumber}
+            <if test="workNumber != null and workNumber != ''">
+                AND u.work_number = #{workNumber}
             </if>
-            <if test="name!=null and name!=''">
-                and name = #{name}
+            <if test="name != null and name != ''">
+                AND u.name = #{name}
             </if>
         </where>
     </select>
+
     <update id="update">
         update user
         <set>
@@ -32,14 +68,14 @@
             <if test="avatarUrl!=null and avatarUrl!=''">
                 avatar_url = #{avatarUrl},
             </if>
-            <if test="postId!=null and postId!=''">
-                post_id = #{postId},
+            <if test="post !=null">
+                post_id = #{post.id},
             </if>
-            <if test="departmentId!=null and departmentId!=''">
-                department_id = #{departmentId},
+            <if test="department !=null">
+                department_id = #{department.id},
             </if>
-            <if test="lineId!=null and lineId!=''">
-                line_id = #{lineId},
+            <if test="line !=null">
+                line_id = #{line.id},
             </if>
             update_time=#{updateTime}
         </set>

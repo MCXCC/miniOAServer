@@ -23,6 +23,10 @@ public class UserController {
     public Result select(@RequestBody(required = false) User user) {
         log.info("查询用户");
         List<User> list = userService.select(user);
+        for (User user1 : list) {
+            System.out.println(user1);
+            System.out.println(user1.getLine());
+        }
         return Result.success(list);
     }
 

@@ -31,17 +31,17 @@ public class User {
      */
     private String avatarUrl;
     /**
-     * 岗位id
+     * 岗位
      */
-    private Integer postId;
+    private Post post;
     /**
      * 部门id
      */
-    private Integer departmentId;
+    private Department department;
     /**
      * 线路id
      */
-    private Integer lineId;
+    private Line line;
     /**
      * 创建时间
      */
@@ -53,12 +53,5 @@ public class User {
 
     public User(String workNumber) {
         this.workNumber = workNumber;
-    }
-
-    public User(String workNumber, Integer postId, Integer departmentId, Integer lineId) {
-        this.workNumber = workNumber;
-        this.postId = postId;
-        this.departmentId = departmentId;
-        this.lineId = lineId;
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public interface UserMapper {
     List<User> select(User user);
 
-    @Insert("insert into user(work_number,password,post_id,department_id,line_id,create_time,update_time) values (#{workNumber},#{password},#{postId},#{departmentId},#{lineId},#{createTime},#{updateTime})")
+    @Insert("insert into user(work_number,password,name,post_id,department_id,line_id,create_time,update_time) values (#{workNumber},#{password},#{name},#{post.id},#{department.id},#{line.id},#{createTime},#{updateTime})")
     void insert(User user);
 
     @Delete("delete from user where id=#{id}")
