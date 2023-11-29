@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.amtr.minioaserver.mapper.UserMapper">
-    <resultMap id="userWithPostResultMap" type="com.amtr.minioaserver.pojo.User">
+    <resultMap id="userWithOtherResultMap" type="com.amtr.minioaserver.pojo.User">
         <id property="id" column="id"/>
         <id property="workNumber" column="work_number"/>
         <id property="password" column="password"/>
@@ -31,7 +31,7 @@
         </association>
     </resultMap>
 
-    <select id="select" resultMap="userWithPostResultMap">
+    <select id="select" resultMap="userWithOtherResultMap">
         SELECT u.id, u.work_number, u.password, u.name, u.avatar_url, u.line_id, u.create_time, u.update_time,
         p.id AS post_id, p.title AS post_title,
         d.id AS department_id, d.title AS department_title,

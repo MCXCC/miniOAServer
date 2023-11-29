@@ -3,17 +3,30 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.amtr.minioaserver.mapper.LineMapper">
-    <select id="select" resultType="com.amtr.minioaserver.pojo.Line">
-        select * from line
+    <resultMap id="lineWithUserResultMap" type="com.amtr.minioaserver.pojo.Line">
+        <id property="id" column="id"/>
+        <id property="title" column="title"/>
+        <id property="createTime" column="create_time"/>
+        <id property="updateTime" column="update_time"/>
+        <!-- 嵌套查询映射 User 类的属性 -->
+        <association property="director" javaType="com.amtr.minioaserver.pojo.User">
+            <id property="id" column="director_id"/>
+            <!-- 其他 User 类的属性映射 -->
+            <result property="workNumber" column="work_number"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+    <select id="select" resultMap="lineWithUserResultMap">
+        select l.id, l.title, l.director_id, l.create_time, l.update_time,
+        u.id, u.work_number, u.name
+        from line l
+        left join user u on l.director_id=u.id
         <where>
             <if test="id!=null and id!=''">
                 id = #{id}
             </if>
             <if test="title!=null and title!=''">
                 and title = #{title}
-            </if>
-            <if test="directorId!=null and directorId!=''">
-                and director_id = #{directorId}
             </if>
         </where>
     </select>
@@ -23,8 +36,8 @@
             <if test="title!=null and title!=''">
                 title=#{title},
             </if>
-            <if test="directorId!=null and directorId!=''">
-                director_id=#{directorId},
+            <if test="director!=null">
+                director_id=#{director.id},
             </if>
             update_time=#{updateTime}
         </set>

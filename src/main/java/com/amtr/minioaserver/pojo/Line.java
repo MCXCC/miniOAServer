@@ -24,7 +24,7 @@ public class Line {
     /**
      * 分管主任ID
      */
-    private Integer directorId;
+    private User director;
     /**
      * 创建时间
      */
