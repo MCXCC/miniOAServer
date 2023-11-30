@@ -33,6 +33,10 @@ public class Result extends ResponseEntity<Message> {
         return new Result("422", msg);
     }
 
+    public static Result noLogin() {
+        return new Result("401", "NO_LOGIN");
+    }
+
     public static Result custom(String code, String msg, Object data) {
         return new Result(code, msg, data);
     }

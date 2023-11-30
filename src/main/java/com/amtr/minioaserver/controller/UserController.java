@@ -1,15 +1,18 @@
 package com.amtr.minioaserver.controller;
 
-import com.amtr.minioaserver.pojo.Department;
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTUtil;
 import com.amtr.minioaserver.pojo.Result;
 import com.amtr.minioaserver.pojo.User;
-import com.amtr.minioaserver.service.DepartmentService;
+import com.amtr.minioaserver.pojo.Userinfo;
 import com.amtr.minioaserver.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -51,5 +54,36 @@ public class UserController {
         log.info("更新用户信息：{}", user);
         userService.update(user);
         return Result.success();
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody User user) {
+        log.info("用户登录：{}", user);
+        // 非空判断
+        if (user.getWorkNumber().isEmpty() || user.getPassword().isEmpty()) {
+            return Result.failMsg("用户名或密码为空!");
+        }
+        List<User> us = userService.select(user);
+        if (us.isEmpty()) {
+            return Result.failMsg("查询不到该用户!");
+        }
+        User u = us.get(0);
+        if (!Objects.equals(u.getPassword(), user.getPassword())) {
+            return Result.failMsg("密码错误!");
+        }
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", u.getId());
+        map.put("work_number", u.getWorkNumber());
+        map.put("expire_time", System.currentTimeMillis() + 1000 * 60 * 60 * 24);
+        String jwt = JWTUtil.createToken(map, "5531".getBytes());
+        Userinfo userinfo = new Userinfo(u.getWorkNumber(), u.getName(), u.getAvatarUrl(), jwt);
+        System.out.println("jwt = " + jwt);
+        boolean right = JWTUtil.verify(jwt, "5531".getBytes());
+        System.out.println("right = " + right);
+        final JWT jwt0 = JWTUtil.parseToken(jwt);
+        Object load = jwt0.getPayload("work_number");
+        System.out.println("load = " + load);
+        return Result.success(userinfo);
     }
 }
